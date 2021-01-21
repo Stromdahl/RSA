@@ -1,17 +1,14 @@
 package com.company;
 
-import java.io.*;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 
 public class RSA {
 
-    public KeyPair privateKey;
-    public KeyPair publicKey;
+    public RSAKey privateKey;
+    public RSAKey publicKey;
 
-    RSA(int bitLength) {
-        generateKeyPairs(bitLength);
+    public RSA() {
     }
 
     RSA(String fileName) {
@@ -19,47 +16,21 @@ public class RSA {
     }
 
     public void saveKeys(String fileName){
-        saveKey(fileName, publicKey);
-        saveKey(fileName, privateKey);
-    }
-
-    private void saveKey(String fileName, KeyPair key) {
-        try {
-            FileOutputStream fileOut = new FileOutputStream(fileName);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(key);
-            out.close();
-        } catch (IOException i) {
-            i.printStackTrace();
-        }
+        publicKey.saveKey(fileName + "_pub.key");
+        privateKey.saveKey(fileName + "_priv.key");
     }
 
     public void readKeys(String fileName){
-        publicKey = readKey(fileName + "_pub.key");
-        privateKey = readKey(fileName + "_priv.key");
+        publicKey.readKey(fileName + "_pub.key");
+        privateKey.readKey(fileName + "_priv.key");
     }
 
-    private KeyPair readKey(String fileName) {
-        KeyPair key = null;
-        try {
-            FileInputStream fileIn = new FileInputStream(fileName);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            key = (KeyPair) in.readObject();
-            in.close();
-        } catch (IOException | ClassNotFoundException i) {
-            i.printStackTrace();
-        }
-        return key;
-    }
-
-    private BigInteger generateRandomBigInteger(int bitLength) {
+    private static BigInteger generateRandomBigInteger(int bitLength) {
         SecureRandom rand = new SecureRandom();
         return new BigInteger(bitLength / 2, 100, rand);
     }
 
-    public void generateKeyPairs(int bitLength) {
-        SecureRandom rand = new SecureRandom();
-
+    public static void generateKeys(String keyName, int bitLength) {
         BigInteger p = generateRandomBigInteger(bitLength);
         BigInteger q = generateRandomBigInteger(bitLength);
         BigInteger n = p.multiply(q);
@@ -69,16 +40,8 @@ public class RSA {
             e = e.add(new BigInteger("2"));
         }
         BigInteger d = e.modInverse(phiN);
-        publicKey = new KeyPair(e, n);
-        privateKey = new KeyPair(d, n);
-    }
-
-    public static String encrypt(String message, KeyPair key) {
-        return (new BigInteger(message.getBytes(StandardCharsets.UTF_8))).modPow(key.getKey(), key.getN()).toString();
-    }
-
-    public static String decrypt(String message, KeyPair key) {
-        String msg = new String(message.getBytes(StandardCharsets.UTF_8));
-        return new String((new BigInteger(msg)).modPow(key.getKey(), key.getN()).toByteArray());
+        //Public key: e + n; Private key d + n;
+        new RSAKey(e, n).saveKey(keyName + "_pub.key");
+        new RSAKey(d, n).saveKey(keyName + "_priv.key");
     }
 }
