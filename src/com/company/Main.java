@@ -9,10 +9,12 @@ package com.company;
 //        Todo:  Om du har tid, även kunna kryptera och dekryptera binärfiler
 //        Todo: Lämna helst in koden i form av en länk till ett publikt GitHub-repo.
 
+import com.company.Menu.Menu;
+
 public class Main {
 
     public static void main(String[] args) {
-        new Menu();
+        new Menu().printMenu();
     }
 
 

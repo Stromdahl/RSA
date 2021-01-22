@@ -11,7 +11,7 @@ public class RSA {
         return new BigInteger(bitLength / 2, 100, rand);
     }
 
-    public static void generateKeys(String keyName, int bitLength) {
+    public static RSAKey[] generateKeys(String keyName, int bitLength) throws IOException {
         BigInteger p = generateRandomBigInteger(bitLength);
         BigInteger q = generateRandomBigInteger(bitLength);
         BigInteger n = p.multiply(q);
@@ -21,25 +21,26 @@ public class RSA {
             e = e.add(new BigInteger("2"));
         }
         BigInteger d = e.modInverse(phiN);
-        //Public key: e + n; Private key d + n;
-        new RSAKey(e, n).saveKey("./keys/" + keyName + "_pub.key");
-        new RSAKey(d, n).saveKey("./keys/" + keyName + "_priv.key");
+
+        RSAKey[] keys = {
+                new RSAKey(e, n), //Public key: e + n;
+                new RSAKey(d, n)  // Private key d + n;
+        };
+
+        keys[0].saveKey("./keys/" + keyName + "_pub.key");
+        keys[1].saveKey("./keys/" + keyName + "_priv.key");
+
+        return keys;
     }
 
-    public static void saveEncryptedMessage(String message, String fileName) {
-        try {
-            File myObj = new File(fileName + ".enc");
-            if (myObj.createNewFile()) {
-                FileWriter myWriter = new FileWriter(myObj);
-                myWriter.write(message);
-                myWriter.close();
-
-            } else {
-                System.out.println("File already exists.");
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+    public static void saveEncryptedMessage(String message, String fileName) throws IOException {
+        File myObj = new File(fileName + ".enc");
+        if (myObj.createNewFile()) {
+            FileWriter myWriter = new FileWriter(myObj);
+            myWriter.write(message);
+            myWriter.close();
+        } else {
+            throw new IOException();
         }
     }
 
