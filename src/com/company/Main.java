@@ -1,31 +1,21 @@
 package com.company;
 
-import com.company.GUI.GUIFrame;
-import com.company.GUI.GenerateKeysDialog;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+//        Todo: Modifiera programmet så att det använder en eller flera klasser som kan användas för att:
+//        Todo: Generera nycklar och spara dem i filer
+//        Todo:  Läsa in sparade nycklar
+//        Todo:  Kunna kryptera och dekryptera strängar
+//        Todo:  Kunna kryptera och dekryptera textfiler
+//        Todo:  Om du har tid, kunna utföra signiering, alltså verifiera att någon har tillgång till den privata nyckeln för en publik nyckel som du själv har tillgång till
+//        Todo:  Om du har tid, även kunna kryptera och dekryptera binärfiler
+//        Todo: Lämna helst in koden i form av en länk till ett publikt GitHub-repo.
 
 public class Main {
+
     public static void main(String[] args) {
-        int bitLength = 4096;
-        //RSA rsa = new RSA(bitLength);
-
-        new GUIFrame();
-
-
-
-//        RSAKey pub = new RSAKey("Mattias_pub.key");
-//        RSAKey priv = new RSAKey("Mattias_priv.key");
-//
-//        String encrypted = pub.encrypt("Pröjsa genast");
-//        String clear = priv.decrypt(encrypted);
-//        System.out.println(clear);
-        // Encrypt
-        //String cipher = msg.modPow(e, n).toString();
-        // Decrypt
-        //String plain = new String((new BigInteger(cipher)).modPow(d, n).toByteArray());
+        new Menu();
     }
+
+
+
+
 }
