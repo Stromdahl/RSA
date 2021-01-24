@@ -44,10 +44,10 @@ public class RSA {
         }
     }
 
-    public static String readEncryptedMessage(String fileName) {
+    public static String readMessage(String fileName) {
         String data = "";
         try {
-            File myObj = new File(fileName + ".enc");
+            File myObj = new File(fileName);
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 data = myReader.nextLine();

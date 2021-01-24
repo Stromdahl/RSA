@@ -4,9 +4,7 @@ import com.company.RSA.RSA;
 import com.company.RSA.RSAKey;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -21,8 +19,8 @@ public class Menu {
                 "Generate keys",
                 "Load key",
                 "Get loaded key",
-                "Encrypt message",
-                "Decrypt message",
+                "Encrypt...",
+                "Decrypt...",
                 "Exit"
         };
 
@@ -138,10 +136,81 @@ public class Menu {
             return;
         }
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Pleas enter the message you want yo encrypt: ");
-        String message = scanner.nextLine();
-        String encryptedMessage = this.key.encrypt(message);
-        System.out.println(encryptedMessage);
+
+        System.out.println("Pleas choose below");
+        System.out.println("1. Enter message to encrypt");
+        System.out.println("2. Encrypt file");
+        System.out.println("3. Back to main menu...");
+
+
+        while (true) {
+            Scanner systemInScanner = new Scanner(System.in);
+            System.out.println(">>>>>> Encrypt <<<<<<");
+            System.out.println("=====================");
+
+            System.out.println("Pleas choose below");
+            System.out.println("1. Enter message to encrypt");
+            System.out.println("2. Encrypt file");
+            System.out.println("3. Back to main menu...");
+
+
+            int userIn;
+            String encryptedMessage;
+            while (true) {
+                try {
+                    System.out.print("> ");
+                    userIn = systemInScanner.nextInt();
+                } catch (InputMismatchException e) {
+                    if (systemInScanner.hasNext()) systemInScanner.next();
+                    continue;
+                }
+                break;
+            }
+
+            switch (userIn) {
+                case 1:
+                    System.out.print("Pleas enter the message you want you encrypt: ");
+                    String message = scanner.nextLine();
+
+                    encryptedMessage = this.key.encrypt(message);
+                    break;
+                case 2:
+                    System.out.print("Enter the path to the file you want to encrypt: ");
+                    do {
+                        String path = scanner.nextLine();
+                        encryptedMessage = key.encrypt(RSA.readMessage(path));
+                    } while (encryptedMessage.isEmpty());
+                    break;
+                case 3:
+                    return;
+                default:
+                    continue;
+            }
+
+
+            System.out.print("Do you want to save the encrypted message to a file? (y/n): ");
+            while (true) {
+                String yOrN = scanner.nextLine();
+
+                switch (yOrN.toLowerCase()) {
+                    case "n" -> {
+                        System.out.println(encryptedMessage);
+                        return;
+                    }
+                    case "y" -> {
+                        System.out.print("Pleas enter the filename: ");
+                        while (true) {
+                            try {
+                                RSA.saveEncryptedMessage(encryptedMessage, scanner.nextLine());
+                                return;
+                            } catch (IOException e) {
+                                System.out.println("Could not save to that file");
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void decryptMessage() {

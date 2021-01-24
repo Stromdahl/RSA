@@ -54,7 +54,7 @@ public class RSATest {
             e.printStackTrace();
         }
 
-        String encryptedMessage = RSA.readEncryptedMessage(keyName);
+        String encryptedMessage = RSA.readMessage(keyName);
 
         assert privateKey != null;
         String cleanMessage = privateKey.decrypt(encryptedMessage);
