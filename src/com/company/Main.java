@@ -11,13 +11,16 @@ package com.company;
 
 import com.company.Menu.Menu;
 
-public class Main {
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.Arrays;
 
+public class Main {
     public static void main(String[] args) {
+
+//        for (String keyFile : new Menu().getKeyFiles()) {
+//            System.out.println(keyFile);
+//        }
         new Menu().printMenu();
     }
-
-
-
-
 }
