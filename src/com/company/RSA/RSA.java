@@ -34,7 +34,7 @@ public class RSA {
     }
 
     public static void saveEncryptedMessage(String message, String fileName) throws IOException {
-        File myObj = new File(fileName + ".enc");
+        File myObj = new File(fileName);
         if (myObj.createNewFile()) {
             FileWriter myWriter = new FileWriter(myObj);
             myWriter.write(message);
@@ -44,19 +44,14 @@ public class RSA {
         }
     }
 
-    public static String readMessage(String fileName) {
+    public static String readMessage(String fileName) throws FileNotFoundException {
         String data = "";
-        try {
             File myObj = new File(fileName);
             Scanner myReader = new Scanner(myObj);
             while (myReader.hasNextLine()) {
                 data = myReader.nextLine();
             }
             myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
         return data;
     }
 }
