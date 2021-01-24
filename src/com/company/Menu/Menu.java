@@ -19,7 +19,6 @@ public class Menu {
         String[] menuOptions = {
                 "Generate keys",
                 "Load key",
-                "Get loaded key",
                 "Encrypt...",
                 "Decrypt...",
                 "Exit"
@@ -30,6 +29,8 @@ public class Menu {
             Scanner systemInScanner = new Scanner(System.in);
             System.out.println(">>>>>>>> RCA <<<<<<<<");
             System.out.println("=====================");
+            System.out.println(keyName.isEmpty()? "No key loaded" : String.format("Key \"%s\" are loaded", keyName));
+
             printMenuOptions(menuOptions);
 
             int userIn;
@@ -47,10 +48,9 @@ public class Menu {
             switch (userIn) {
                 case 1 -> generateKeys();
                 case 2 -> loadKeys();
-                case 3 -> getLoadedKey();
-                case 4 -> printEncryptMenu();
-                case 5 -> decryptMessage();
-                case 6 -> exit();
+                case 3 -> printEncryptMenu();
+                case 4 -> printDecryptMenu();
+                case 5 -> exit();
             }
         }
 
@@ -73,13 +73,10 @@ public class Menu {
 
         try {
             key = RSA.generateKeys(keyName, bitLength)[0];
-            this.keyName = keyName;
+            this.keyName = keyName + "_priv.key";
         } catch (IOException e) {
             System.out.println("File already exists.");
-            return;
         }
-        System.out.println(keyName + " are now loaded \n Press enter to continue");
-
     }
 
     void loadKeys() {
@@ -90,9 +87,8 @@ public class Menu {
         for (int i = 0; i < availableKeys.length; i++) {
             System.out.println((i + 1) + ". " + availableKeys[i]);
         }
-
-        String keyName = "";
         while (true) {
+            System.out.print("> ");
             try {
                 keyName = availableKeys[systemInScanner.nextInt() - 1];
                 this.key = new RSAKey("./keys/" + keyName);
@@ -117,16 +113,6 @@ public class Menu {
             fileNames[i] = splitPath[splitPath.length - 1];
         }
         return fileNames;
-    }
-
-    private void getLoadedKey() {
-        if (key == null) {
-            System.out.print("No key loaded");
-        } else {
-            System.out.print(this.keyName);
-        }
-        System.out.print(" - Press enter to continue");
-        new Scanner(System.in).nextLine();
     }
 
     private void printEncryptMenu() {
@@ -213,7 +199,7 @@ public class Menu {
         }
     }
 
-    private void decryptMessage() {
+    private void printDecryptMenu() {
         if (this.key == null) {
             System.out.println("No key loaded - generate new keys or load a existing key");
             return;
@@ -297,6 +283,7 @@ public class Menu {
 
     private void exit() {
         System.exit(0);
+        System.out.println("Thank you come again");
     }
 
 }
